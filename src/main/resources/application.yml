@@ -14,7 +14,9 @@ spring:
       minimum-idle: 10
       pool-name: GuliHikariPool
     type: com.zaxxer.hikari.HikariDataSource
-
+    jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: GMT+8
   thymeleaf:
     cache: false
     mode: LEGACYHTML5
