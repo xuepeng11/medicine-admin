@@ -13,6 +13,6 @@ public class MedicineAdminApplication {
     }
 
     //修改了
-    // 哈哈
+    //驱蚊器
 
 }
