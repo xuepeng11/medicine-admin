@@ -15,10 +15,5 @@ public class MedicineAdminApplication {
     //修改了
     //qweqwe
 
-    //qweqwe
-    
-    //qweqeqw
-
-    ///qweeqqweqe
 
 }
