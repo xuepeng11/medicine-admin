@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>首页</title>
+    <link rel="icon" href="/img/favicon.ico" type="/image/x-icon"/>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/layui/css/global.css">
+    <link rel="stylesheet" href="/echarts/css/admin.css">
+    <link rel="stylesheet" href="/icon/iconfont.css">
+</head>
+
+<body>
+
+<div>
+    <div th:replace="common/bar::#topbar"></div>
+    <div th:replace="common/normal-bar::#sidebar(activeUri='home')"></div>
+
+    <!-- 自定义内同容 -->
+    <div style="margin-left:200px; margin-top: 50px;">
+        <div class="wrap-container welcome-container">
+            <div class="row">
+                <div class="welcome-left-container col-lg-12">
+                    <div class="data-show">
+                        <ul class="clearfix">
+                            <li class="col-sm-12 col-md-4 col-xs-12">
+                                <a href="javascript:;" class="clearfix">
+                                    <div class="icon-bg bg-org f-l">
+                                        <span class="iconfont">&#xe606;</span>
+                                    </div>
+                                    <div class="right-text-con">
+                                        <p class="name">中药数</p>
+                                        <p><span class="color-org">89</span>数据<span class="iconfont">&#xe628;</span>
+                                        </p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="col-sm-12 col-md-4 col-xs-12">
+                                <a href="javascript:;" class="clearfix">
+                                    <div class="icon-bg bg-blue f-l">
+                                        <span class="iconfont">&#xe602;</span>
+                                    </div>
+                                    <div class="right-text-con">
+                                        <p class="name">西药数</p>
+                                        <p><span class="color-blue">189</span>数据<span
+                                                class="iconfont">&#xe628;</span></p>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="col-sm-12 col-md-4 col-xs-12">
+                                <a href="javascript:;" class="clearfix">
+                                    <div class="icon-bg bg-green f-l">
+                                        <span class="iconfont">&#xe605;</span>
+                                    </div>
+                                    <div class="right-text-con">
+                                        <p class="name">用户数</p>
+                                        <p><span class="color-green">221</span>数据<span
+                                                class="iconfont">&#xe60f;</span></p>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--图表-->
+                    <div class="chart-panel panel panel-default">
+                        <div class="panel-body" id="chart" style="height: 376px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/layui/layui.js"></script>
+<script src="/jquery/jquery-3.3.1.min.js"></script>
+<script src="/echarts/echarts.js"></script>
+<script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'element', 'form'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+    });
+
+    $("#qwe").click(function () {
+        layer.msg('Hello World');
+    });
+
+    //监听导航点击
+    // element.on('nav(demo)', function (elem) {
+    //     //console.log(elem)
+    //     layer.msg(elem.text());
+    // });
+
+    layui.use(['layer', 'jquery'], function () {
+        var layer = layui.layer;
+        var $ = layui.jquery;
+        //图表
+        var myChart;
+        require.config({
+            paths: {
+                echarts: '/echarts'
+            }
+        });
+        require(
+            [
+                'echarts',
+                'echarts/chart/bar',
+                'echarts/chart/line',
+                'echarts/chart/map'
+            ],
+            function (ec) {
+                //--- 折柱 ---
+                myChart = ec.init(document.getElementById('chart'));
+                myChart.setOption(
+                    {
+                        title: {
+                            text: "数据统计",
+                            textStyle: {
+                                color: "rgb(85, 85, 85)",
+                                fontSize: 18,
+                                fontStyle: "normal",
+                                fontWeight: "normal"
+                            }
+                        },
+                        tooltip: {
+                            trigger: "axis"
+                        },
+                        legend: {
+                            data: ["中药", "西药", "用户"],
+                            selectedMode: false,
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                dataView: {
+                                    show: false,
+                                    readOnly: true
+                                },
+                                magicType: {
+                                    show: false,
+                                    type: ["line", "bar", "stack", "tiled"]
+                                },
+                                restore: {
+                                    show: true
+                                },
+                                saveAsImage: {
+                                    show: true
+                                },
+                                mark: {
+                                    show: false
+                                }
+                            }
+                        },
+                        calculable: false,
+                        xAxis: [
+                            {
+                                type: "category",
+                                boundaryGap: false,
+                                data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: "value"
+                            }
+                        ],
+                        grid: {
+                            x2: 30,
+                            x: 50
+                        },
+                        series: [
+                            {
+                                name: "中药",
+                                type: "line",
+                                smooth: true,
+                                itemStyle: {
+                                    normal: {
+                                        areaStyle: {
+                                            type: "default"
+                                        }
+                                    }
+                                },
+                                data: [10, 12, 21, 54, 260, 830, 710]
+                            },
+                            {
+                                name: "西药",
+                                type: "line",
+                                smooth: true,
+                                itemStyle: {
+                                    normal: {
+                                        areaStyle: {
+                                            type: "default"
+                                        }
+                                    }
+                                },
+                                data: [30, 182, 434, 791, 390, 30, 10]
+                            },
+                            {
+                                name: "用户",
+                                type: "line",
+                                smooth: true,
+                                itemStyle: {
+                                    normal: {
+                                        areaStyle: {
+                                            type: "default"
+                                        },
+                                        color: "rgb(110, 211, 199)"
+                                    }
+                                },
+                                data: [1320, 1132, 601, 234, 120, 90, 20]
+                            }
+                        ]
+                    }
+                );
+            }
+        );
+    });
+</script>
+</body>
+
+</html>

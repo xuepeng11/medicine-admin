@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/img/favicon.ico" type="/image/x-icon"/>
+    <link rel="stylesheet" href="/layui/css/login.css">
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <title>后台登录</title>
+</head>
+<body>
+<div class="m-login-bg">
+    <div class="m-login">
+        <h3>药品管理系统登录</h3>
+        <div class="m-login-warp">
+            <form class="layui-form" action="/medicine/user/login" method="post">
+                <div class="layui-form-item">
+                    <input type="text" id="userName" name="userName" th:value="${userName}" required
+                           lay-verify="required" placeholder="用户名" autocomplete="off"
+                           class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <input type="password" id="userPassword" name="userPassword" required lay-verify="required"
+                           placeholder="密码"
+                           autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <input type="text" id="userCode" name="userCode" required lay-verify="required"
+                               placeholder="验证码"
+                               autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-inline">
+                        <img id="verification" src="/verification" class="rounded"
+                             style="cursor: pointer;height: 39px;width: 130px;margin-bottom: 7px"
+                             onclick="refresh(this)" title="看不清？换一张"/>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="margin-top: -15px">
+                    <div class="layui-inline">
+                        <div class="layui-form">
+                            <input type="checkbox" name="rememberMe" lay-skin="switch" lay-text="记住我|不记住">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="radio" name="role" value="1" title="药剂师" checked>
+                            <input type="radio" name="role" value="0" title="管理员">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item m-login-btn">
+                    <div class="layui-inline">
+                        <button class="layui-btn layui-btn-normal" lay-submit lay-filter="login">登录</button>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="reset" class="layui-btn layui-btn-primary">取消</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<input th:value="${errorMsg}" type="hidden" id="errorMsg">
+<input th:value="${quitMsg}" type="hidden" id="quitMsg">
+</body>
+<script src="/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+<script src="/jquery/jquery-3.3.1.min.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+    function refresh(obj) {
+        obj.src = "/verification?id=" + Math.random();
+    }
+
+    window.onload = function () {
+        var val = $("#errorMsg").val();
+        if (!(val.length == 0)) {
+            layui.use(['jquery', 'layer'], function () {
+                layer.msg(val, {icon: 5});
+            });
+        }
+        var quitMsg = $("#quitMsg").val();
+        if (!(quitMsg.length == 0)) {
+            layui.use(['jquery', 'layer'], function () {
+                layer.msg(quitMsg, {icon: 5});
+            });
+        }
+    };
+
+    /*$(function () {
+        /!*var val = $("#errorMsg").val();
+        if(val!=null){
+            alert(val);
+        }*!/
+        var val = $("#errorMsg").val();
+    })*/
+
+    layui.use(['form', 'jquery', 'layer', 'layedit', 'laydate'], function () {
+        var form = layui.form(),
+            layer = layui.layer;
+
+        //自定义验证规则
+        form.verify({
+            title: function (value) {
+                if (value.length < 5) {
+                    return '标题至少得5个字符啊';
+                }
+            },
+            password: [/(.+){6,12}$/, '密码必须6到12位'],
+            verity: [/(.+){6}$/, '验证码必须是6位'],
+
+        });
+
+
+        /*//监听提交
+        form.on('submit(login)', function(data) {
+            layer.alert(JSON.stringify(data.field), {
+                title: '最终的提交信息'
+            })
+            return false;
+        });
+*/
+
+    });
+</script>
+</html>

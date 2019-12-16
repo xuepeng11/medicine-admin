@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>药品管理</title>
+    <link rel="icon" href="/img/favicon.ico" type="/image/x-icon"/>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/layui/css/global.css">
+    <link rel="stylesheet" href="/echarts/css/admin.css">
+    <link rel="stylesheet" href="/icon/iconfont.css">
+</head>
+
+<body>
+
+<div>
+    <div th:replace="common/bar::#topbar(one='药材管理',two='中药')"></div>
+    <div th:replace="common/normal-bar::#sidebar(activeUri='medicine',secondUri='chn')"></div>
+
+    <!-- 自定义内同容 -->
+    <div style="margin-left:200px; margin-top: 30px;">
+        <div style="padding: 20px; background-color: #F2F2F2;">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            <font style="color: #00aeff;width: 50px;">|</font>&nbsp;中药管理
+                        </div>
+                        <div class="layui-card-body">
+                            <a href="/medicine/chn" class="layui-btn layui-btn-radius layui-btn-sm layui-btn-normal">
+                                <i class="layui-icon">&#xe654;</i>
+                                添加
+                            </a>
+                            <form action="/medicine/list/chn" method="get" style="float: right">
+                                <div class="layui-inline">
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" th:value="${search}!=null?${search.produceDateBegin}" autocomplete="off" name="produceDateBegin" id="produceDateBegin" placeholder="请选择起始生产日期">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" autocomplete="off" th:value="${search}!=null?${search.produceDateEnd}" name="produceDateEnd" id="produceDateEnd" placeholder="请选择截止生产日期">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" autocomplete="off" th:value="${search}!=null?${search.expireDateBegin}" name="expireDateBegin" id="expireDateBegin" placeholder="请选择起始过期日期">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <div class="layui-input-inline">
+                                        <input type="text" class="layui-input" autocomplete="off" th:value="${search}!=null?${search.expireDateEnd}" name="expireDateEnd" id="expireDateEnd" placeholder="请选择截止过期日期">
+                                    </div>
+                                </div>
+                                <div class="layui-inline">
+                                    <input type="text" name="name" autocomplete="off" th:value="${search}!=null?${search.name}" class="layui-input" placeholder="请输入商品名称">
+                                </div>
+                                <div class="layui-inline">
+                                    <button class="layui-btn layui-btn-radius layui-btn-sm layui-btn-normal">
+                                        <i class="layui-icon">&#xe615;</i>
+                                        搜索
+                                    </button>
+                                </div>
+                            </form>
+                            <br>
+                            <br>
+                            <div class="layui-form">
+                                <table class="layui-table" lay-skin="line">
+                                    <thead>
+                                    <tr style="background-color: white">
+                                        <th style="text-align: center;">ID</th>
+                                        <th style="text-align: center;">货号</th>
+                                        <th style="text-align: center;">名称</th>
+                                        <th style="text-align: center;">生产日期</th>
+                                        <th style="text-align: center;">过期日期</th>
+                                        <th style="text-align: center;">进价</th>
+                                        <th style="text-align: center;">售价</th>
+                                        <th style="text-align: center;">数量</th>
+                                        <th style="text-align: center;">生产商</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="medicineChn:${medicineChnList}">
+                                        <td style="text-align: center;" th:text="${medicineChn.id}"></td>
+                                        <td style="text-align: center;" th:text="${medicineChn.goodsId}"></td>
+                                        <td style="text-align: center;" th:text="${medicineChn.goodsName}"></td>
+                                        <td style="text-align: center;" th:text="${#dates.format(medicineChn.produceDate,'yyyy-MM-dd')}"></td>
+                                        <td style="text-align: center;" th:text="${#dates.format(medicineChn.expireDate,'yyyy-MM-dd')}"></td>
+                                        <td style="text-align: center;">￥ [[${medicineChn.bidMoney}]]</td>
+                                        <td style="text-align: center;">￥ [[${medicineChn.saleMoney}]]</td>
+                                        <td style="text-align: center;" th:text="${medicineChn.quantity}"></td>
+                                        <td style="text-align: center;" th:text="${medicineChn.producer}"></td>
+                                    </tr>
+                                    <tr th:if="${medicineChnList.size()}==0">
+                                        <td colspan="10" style="text-align: center;">暂无数据</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                总记录：[[${medicineChnList.size()}]]
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="successMsg" th:value="${successMsg}">
+<script src="/layui/layui.js"></script>
+<script src="/jquery/jquery-3.3.1.min.js"></script>
+<script src="/echarts/echarts.js"></script>
+<script>
+    //一般直接写在一个js文件中
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'element', 'form','laydate'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , laydate = layui.laydate
+            , element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+        laydate.render({
+            elem: '#produceDateBegin'
+        });
+        laydate.render({
+            elem: '#produceDateEnd'
+        });
+        laydate.render({
+            elem: '#expireDateBegin'
+        });
+        laydate.render({
+            elem: '#expireDateEnd'
+        });
+
+    });
+
+    window.onload = function () {
+        var successMsg = $("#successMsg").val();
+        if (!(successMsg.length == 0)) {
+            layui.use(['jquery', 'layer'], function () {
+                layer.msg(successMsg, {icon: 1});
+            });
+        }
+    };
+
+</script>
+</body>
+
+</html>

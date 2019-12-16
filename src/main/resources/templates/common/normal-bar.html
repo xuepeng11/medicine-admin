@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+
+<div class="layui-side layui-bg-cyan" id="sidebar">
+    <div class="layui-side-scroll">
+        <ul class="layui-nav layui-bg-cyan layui-nav-tree site-demo-nav">
+            <li>
+                <img src="/img/lyun.jpg" style="height: 42px;width: 200px;" alt="layui">
+            </li>
+            <li class="layui-nav-item" th:classappend="${activeUri=='home'?'layui-this':''}">
+                <a href="/medicine/user/home">
+                    <i class="layui-icon layui-icon-home" style="font-size: 16px;"></i>
+                    &nbsp;首页
+                </a>
+            </li>
+
+            <li class="layui-nav-item" th:classappend="${activeUri=='medicine'?'layui-nav-itemed':''}">
+                <a href="javascript:;">
+                    <i class="layui-icon layui-icon-console" style="font-size: 16px;"></i>
+                    &nbsp;药材管理
+                    <span class="layui-nav-more"></span>
+                </a>
+                <dl class="layui-nav-child">
+                    <dd th:classappend="${secondUri=='chn'?'layui-this':''}">
+                        <a href="/medicine/list/chn">中药</a>
+                    </dd>
+                    <dd th:classappend="${secondUri=='en'?'layui-this':''}">
+                        <a href="/medicine/list/en">西药</a>
+                    </dd>
+                </dl>
+
+            <li class="layui-nav-item" style="height: 30px; text-align: center"></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

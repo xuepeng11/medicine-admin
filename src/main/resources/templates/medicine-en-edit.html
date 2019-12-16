@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>药品管理</title>
+    <link rel="icon" href="/img/favicon.ico" type="/image/x-icon"/>
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/layui/css/global.css">
+    <link rel="stylesheet" href="/echarts/css/admin.css">
+    <link rel="stylesheet" href="/icon/iconfont.css">
+</head>
+
+<body>
+
+<div>
+    <div th:replace="common/bar::#topbar(one='药材管理',two='中药')"></div>
+    <div th:replace="common/bar::#sidebar(activeUri='medicine',secondUri='en')"></div>
+
+    <!-- 自定义内同容 -->
+    <div style="margin-left:200px; margin-top: 30px;">
+        <div style="padding: 20px; background-color: #F2F2F2;">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                            <font style="color: #00aeff;width: 50px;">|</font>&nbsp;西药添加
+                        </div>
+                        <div class="layui-card-body">
+                            <form class="layui-form" action="/medicine/en/save" method="post">
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">货号</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="goodsId"
+                                               th:value="${medicineEn}!=null?${medicineEn.goodsId}" required
+                                               lay-verify="required" placeholder="请输入货号" autocomplete="off"
+                                               class="layui-input">
+                                        <input type="hidden" th:value="${medicineEn}!=null?${medicineEn.id}" name="id"/>
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">名称</label>
+                                    <div class="layui-input-inline">
+                                        <input type="text" name="goodsName"
+                                               th:value="${medicineEn}!=null?${medicineEn.goodsName}" required
+                                               lay-verify="required" placeholder="请输入货物名称" autocomplete="off"
+                                               class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">生产日期</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" class="layui-input"
+                                               th:value="${medicineEn}!=null?${#dates.format(medicineEn.produceDateTemp,'yyyy-MM-dd')}"
+                                               autocomplete="off"
+                                               name="produceDateTemp" id="produceDateTemp" placeholder="请选择起始生产日期">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">过期日期</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" class="layui-input"
+                                               th:value="${medicineEn}!=null?${#dates.format(medicineEn.expireDateTemp,'yyyy-MM-dd')}"
+                                               autocomplete="off"
+                                               name="expireDateTemp" id="expireDateTemp" placeholder="请选择起始过期日期">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">进价</label>
+                                    <div class="layui-input-block">
+                                        <input type="number" name="bidMoney"
+                                               th:value="${medicineEn}!=null?${medicineEn.bidMoney}" placeholder="￥"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">售价</label>
+                                    <div class="layui-input-block">
+                                        <input type="number" name="saleMoney"
+                                               th:value="${medicineEn}!=null?${medicineEn.saleMoney}" placeholder="￥"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">数量</label>
+                                    <div class="layui-input-block">
+                                        <input type="number" name="quantity"
+                                               th:value="${medicineEn}!=null?${medicineEn.quantity}" placeholder="请输入数量"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">计量单位</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="unit"
+                                               th:value="${medicineEn}!=null?${medicineEn.unit}" placeholder="请输入计量单位"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <label class="layui-form-label">生产商</label>
+                                    <div class="layui-input-block">
+                                        <input type="text" name="producer"
+                                               th:value="${medicineEn}!=null?${medicineEn.producer}" placeholder="请输入生产商"
+                                               autocomplete="off" class="layui-input">
+                                    </div>
+                                </div>
+                                <div class="layui-form-item">
+                                    <div class="layui-input-block">
+                                        <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/layui/layui.js"></script>
+<script src="/jquery/jquery-3.3.1.min.js"></script>
+<script src="/echarts/echarts.js"></script>
+<script>
+    //一般直接写在一个js文件中
+    layui.use(['layer', 'element', 'form', 'jquery', 'laydate'], function () {
+        var layer = layui.layer
+            , form = layui.form
+            , laydate = layui.laydate
+            , $ = layui.jquery
+            , element = layui.element; //导航的hover效果、二级菜单等功能，需要依赖element模块
+
+        laydate.render({
+            elem: '#produceDateTemp'
+        });
+        laydate.render({
+            elem: '#expireDateTemp'
+        });
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            layer.msg(JSON.stringify(data.field));
+            return false;
+        });
+
+    });
+
+</script>
+</body>
+
+</html>

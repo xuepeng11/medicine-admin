@@ -1,0 +1,41 @@
+server:
+  port: 81
+
+spring:
+  profiles:
+    active: prod
+  datasource:
+    hikari:
+      connection-test-query: SELECT 1
+      connection-timeout: 60000
+      idle-timeout: 500000
+      max-lifetime: 540000
+      maximum-pool-size: 12
+      minimum-idle: 10
+      pool-name: GuliHikariPool
+    type: com.zaxxer.hikari.HikariDataSource
+    jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: GMT+8
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:xml/*Mapper.xml
+
+kaptcha:
+  textproducer:
+    font:
+      color: blue
+      size: 30
+      names: \u5B8B\u4F53,\u6977\u4F53,\u5FAE\u8F6F\u96C5\u9ED1
+    char:
+      length: 4
+  image:
+    width: 130
+    height: 39
+  session:
+    key: code
